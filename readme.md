@@ -18,7 +18,7 @@
 ## ⚙️ Installation & Setup
 1. **Clone the project:**
    ```bash
-   git clone [https://github.com/yourusername/insight-ai.git](https://github.com/yourusername/insight-ai.git)
+   git clone https://github.com/erharshitcse/InsightAI.git
    cd InsightAI
    ```
 
