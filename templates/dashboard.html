@@ -3,85 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightAI Professional Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>InsightAI | Professional Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Custom Tailwind Config (Optional, to match our local theme)
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'slate-bg': '#0f172a',
-                        'slate-card': '#1e293b',
-                    }
-                }
-            }
-        }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* --- PROFESSIONAL BUSINESS THEME --- */
+        :root {
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --accent-blue: #3b82f6;
+            --text-main: #f1f5f9;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: var(--card-dark);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100vh;
+            position: fixed;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            width: calc(100% - 260px);
+        }
+
+        /* Input Styling */
+        .query-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .query-box:focus-within {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: rgba(59, 130, 246, 0.1);
+            color: #94a3b8;
+            text-align: left;
+            padding: 12px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
 </head>
-<body class="flex min-h-screen">
-    <aside class="w-64 p-6 hidden md:block">
-        <h1 class="text-3xl font-bold text-blue-500 mb-10 text-center">InsightAI</h1>
-        <div class="space-y-4">
-            <p class="text-xs font-semibold text-slate-500 uppercase">Menu</p>
-            <a href="/" class="flex items-center space-x-3 text-slate-400 p-2 rounded-lg hover:bg-slate-800">
+<body>
+
+    <div class="sidebar p-6 flex flex-col">
+        <h1 class="text-3xl font-black text-blue-500 italic mb-10">InsightAI</h1>
+        
+        <nav class="space-y-4 flex-1">
+            <p class="text-xs font-bold text-slate-500 tracking-widest uppercase">Navigation</p>
+            <a href="/" class="flex items-center space-x-3 text-slate-400 hover:text-white transition">
                 <span>🏠 Home</span>
             </a>
-            <a href="#" class="flex items-center space-x-3 p-2 bg-blue-600/20 text-blue-400 rounded-lg">
+            <a href="/dashboard" class="flex items-center space-x-3 text-blue-400 font-bold">
                 <span>📊 Dashboard</span>
             </a>
-        </div>
-        
-        <div class="mt-12">
+        </nav>
+
+        <div class="mt-auto">
             <input type="file" id="fileInput" class="hidden" onchange="uploadFile()">
-            <button onclick="document.getElementById('fileInput').click()" class="w-full bg-slate-700 py-3 rounded-lg text-sm font-semibold hover:bg-slate-600 transition">
-                📁 Upload CSV
+            <button onclick="document.getElementById('fileInput').click()" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition shadow-lg shadow-blue-900/20">
+                Upload CSV
             </button>
-            <p id="uploadStatus" class="hidden text-emerald-400 text-xs mt-3 text-center">✅ Ready to Analyze</p>
+            <p id="uploadStatus" class="hidden text-emerald-400 text-xs mt-3 text-center animate-pulse">● Data Ready</p>
         </div>
-    </aside>
+    </div>
 
-    <main class="flex-1 p-8 lg:p-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-10 border-b border-slate-800 pb-5">
-                <h2 class="text-4xl font-extrabold">Analytics Center</h2>
-                <div class="flex items-center space-x-3 glass-panel py-2 px-4 rounded-full">
-                    <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <span class="text-sm text-slate-400">Gemini AI Active</span>
-                </div>
+    <div class="main-content">
+        <header class="mb-10 flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-bold mb-2">Analytics Center</h2>
+                <p class="text-slate-400">Ask your AI assistant to visualize your business data.</p>
             </div>
-
-            <div class="glass-panel mb-10 shadow-xl">
-                <div class="flex gap-4 items-center">
-                    <div class="w-10 h-10 flex items-center justify-center bg-blue-600/10 text-blue-400 rounded-full">
-                        🔍
-                    </div>
-                    <input type="text" id="queryInput" placeholder="Ask your data anything (e.g., 'Compare revenue by region')..." 
-                           class="flex-1 bg-transparent border-none outline-none text-xl p-2 text-white placeholder-slate-500"
-                           onkeypress="if(event.key==='Enter') runQuery()">
-                    <button onclick="runQuery()" class="primary-btn">Analyze</button>
-                </div>
+            <div class="text-right">
+                <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700">Gemini 1.5 Flash Active</span>
             </div>
+        </header>
 
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                <div class="glass-panel xl:col-span-2 min-h-[500px]">
-                    <h3 class="text-2xl font-bold mb-6 text-slate-300">AI Visual</h3>
-                    <div id="loading" class="hidden text-center text-blue-400 italic pt-20">Gemini is thinking...</div>
+        <div class="glass p-4 mb-10">
+            <div class="flex items-center gap-4 query-box px-4 py-2">
+                <span class="text-xl">🔍</span>
+                <input type="text" id="queryInput" 
+                       class="bg-transparent flex-1 outline-none text-white py-2 text-lg" 
+                       placeholder="e.g. 'Show me revenue trends' or 'Top 5 categories by sales'"
+                       onkeypress="if(event.key==='Enter') runQuery()">
+                <button onclick="runQuery()" class="bg-blue-600 hover:bg-blue-700 px-8 py-2 rounded-lg font-bold transition">
+                    Analyze
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass p-6 min-h-[450px] flex flex-col">
+                <h3 class="text-xl font-bold mb-6 text-slate-300">AI Visualization</h3>
+                <div id="loading" class="hidden flex-1 flex items-center justify-center text-blue-400 italic">
+                    AI is processing data...
+                </div>
+                <div class="flex-1 relative">
                     <canvas id="chartCanvas"></canvas>
                 </div>
+            </div>
 
-                <div class="glass-panel max-h-[500px] overflow-auto">
-                    <h3 class="text-2xl font-bold mb-6 text-slate-300">Data View</h3>
-                    <div id="tableContainer">
-                        <p class="text-slate-500 italic text-center pt-20">Your insights will appear here.</p>
-                    </div>
+            <div class="glass p-6 max-h-[450px] overflow-auto">
+                <h3 class="text-xl font-bold mb-6 text-slate-300">Detailed Insights</h3>
+                <div id="tableContainer">
+                    <p class="text-slate-500 italic mt-10 text-center">No data loaded yet.</p>
                 </div>
             </div>
         </div>
-    </main>
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    </div>
+
+    <script>
+        let myChart;
+        let isFileReady = false;
+
+        async function uploadFile() {
+            const file = document.getElementById('fileInput').files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            if(res.ok) {
+                isFileReady = true;
+                document.getElementById('uploadStatus').classList.remove('hidden');
+                alert("Bhai, file aa gayi! Ab query run karo.");
+            }
+        }
+
+        async function runQuery() {
+            const query = document.getElementById('queryInput').value;
+            if(!isFileReady) return alert("Pehle CSV file upload toh kar lo!");
+            
+            document.getElementById('loading').classList.remove('hidden');
+            if(myChart) myChart.destroy();
+
+            const res = await fetch('/api/query', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ query: query })
+            });
+            const result = await res.json();
+            document.getElementById('loading').classList.add('hidden');
+
+            // Render Table
+            document.getElementById('tableContainer').innerHTML = result.table_html;
+
+            // Render Chart
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: result.chart_type === 'pie' ? 'pie' : (result.chart_type === 'line' ? 'line' : 'bar'),
+                data: {
+                    labels: result.labels,
+                    datasets: [{
+                        label: 'Insights',
+                        data: result.values,
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } },
+                    scales: result.chart_type !== 'pie' ? {
+                        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#64748b' }, grid: { display: false } }
+                    } : {}
+                }
+            });
+        }
+    </script>
 </body>
 </html>
