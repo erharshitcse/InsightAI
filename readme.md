@@ -19,7 +19,7 @@
 1. **Clone the project:**
    ```bash
    git clone [https://github.com/yourusername/insight-ai.git](https://github.com/yourusername/insight-ai.git)
-   cd Insight-ai
+   cd InsightAI
    ```
 
 2. **Install dependencies:**
