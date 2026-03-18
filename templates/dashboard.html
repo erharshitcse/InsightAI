@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="text-white flex min-h-screen">
+    <aside class="w-64 glass p-6">
+        <h1 class="text-blue-500 text-xl font-bold mb-10 text-center">InsightAI</h1>
+        <input type="file" id="fileInput" class="hidden" onchange="uploadFile()">
+        <button onclick="document.getElementById('fileInput').click()" class="w-full bg-slate-700 py-2 rounded mb-2">Upload CSV</button>
+        <p id="uploadStatus" class="hidden text-emerald-400 text-xs text-center">✅ Ready</p>
+    </aside>
+    <main class="flex-1 p-10">
+        <div class="glass p-4 rounded-xl mb-8 flex gap-4">
+            <input type="text" id="queryInput" class="bg-transparent flex-1 outline-none text-lg" placeholder="Ask something...">
+            <button onclick="runQuery()" class="bg-blue-600 px-8 py-2 rounded-lg font-bold">Analyze</button>
+        </div>
+        <div class="grid grid-cols-2 gap-8">
+            <div class="glass p-6 rounded-xl min-h-[400px]">
+                <p id="loading" class="hidden text-blue-400 text-center">AI Thinking...</p>
+                <canvas id="chartCanvas"></canvas>
+            </div>
+            <div id="tableContainer" class="glass p-6 rounded-xl overflow-auto max-h-[400px]"></div>
+        </div>
+    </main>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
